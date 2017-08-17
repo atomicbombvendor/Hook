@@ -7,11 +7,11 @@ import java.util.Map;
  * Created by ZZ on 2017/8/17.
  */
 public class KeyBoard {
-
     /**
      * Get mapping between vkCode(key board button code) and keyEvent(KeyBoard button)
      * @return Map
      */
+
     public static Map<Integer, String> vkCodeToKeyEvent(){
         Map<Integer, String> vCode = new HashMap<>();
         PropertiesFactory.getInstance();
