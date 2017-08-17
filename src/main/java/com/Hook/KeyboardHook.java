@@ -41,8 +41,10 @@ public class KeyboardHook implements Runnable{
             BufferedWriter bw1=null;
             BufferedWriter bw2=null;
             try {
-                bw1=new BufferedWriter(new FileWriter(new File(".//log//"+fileName+"_Keyboard.txt"),true));
-                bw2=new BufferedWriter(new FileWriter(new File(".//log//"+fileName+"_Common.txt"),true));
+                File keyBord = FileUtils.createFile(".//log//"+fileName+"_Keyboard.txt");
+                File common = FileUtils.createFile(".//log//"+fileName+"_Common.txt");
+                bw1=new BufferedWriter(new FileWriter(keyBord,true));
+                bw2=new BufferedWriter(new FileWriter(common,true));
 
             } catch (IOException e) {
                 e.printStackTrace();

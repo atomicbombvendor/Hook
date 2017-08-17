@@ -11,6 +11,7 @@ public class Monitor  {
 
     public Monitor()  {
         boolean [] on_off={true};
+        //create three thread
         new Thread(new ProcessInfo(on_off)).start();
         new Thread(new KeyboardHook(on_off)).start();
         new Thread(new MouseHook(on_off)).start();

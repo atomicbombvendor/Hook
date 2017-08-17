@@ -25,22 +25,23 @@ public class ProcessInfo implements Runnable{
 
     public void run() {
         BufferedReader input = null;
-        Process process = null;
+        Process process;
         BufferedWriter bw=null;
         SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String fileName=null;
-        String time=null;
+        String fileName;
+        String time;
         try {
             while(on_off[0]){
                 fileName=df1.format(new Date());
                 time=df2.format(new Date());
-                bw=new BufferedWriter(new FileWriter(new File(".//log//"+fileName+"_ProcessInfo.txt"),true));
+                File processInfo = FileUtils.createFile(".//log//"+fileName+"_ProcessInfo.txt");
+                bw=new BufferedWriter(new FileWriter(processInfo,true));
                 Thread.sleep(60000);
                 process = Runtime.getRuntime().exec("cmd.exe   /c   tasklist");
                 input =new BufferedReader(
                         new InputStreamReader(process.getInputStream()));
-                String line = " ";
+                String line;
                 int i=0;
                 input.readLine();
                 input.readLine();

@@ -16,6 +16,7 @@ import com.sun.jna.examples.win32.W32API.HMODULE;
 import com.sun.jna.examples.win32.W32API.LRESULT;
 import com.sun.jna.examples.win32.W32API.WPARAM;
 import com.sun.jna.examples.win32.User32.HOOKPROC;
+
 /**
  * 实现监听鼠标的代码
  * http://blog.csdn.net/qq_27099139/article/details/73530614
@@ -40,7 +41,7 @@ public class MouseHook implements Runnable{
     public static class MOUSEHOOKSTRUCT extends Structure {
         public static class ByReference extends MOUSEHOOKSTRUCT implements
                 Structure.ByReference {
-        };
+        }
         public User32.POINT pt;
         public int wHitTestCode;
         public User32.ULONG_PTR dwExtraInfo;
@@ -58,8 +59,10 @@ public class MouseHook implements Runnable{
                 BufferedWriter bw1=null;
                 BufferedWriter bw2=null;
                 try {
-                    bw1=new BufferedWriter(new FileWriter(new File(".//log//"+fileName+"_Mouse.txt"),true));
-                    bw2=new BufferedWriter(new FileWriter(new File(".//log//"+fileName+"_Common.txt"),true));
+                    File mouse = FileUtils.createFile(".//log//"+fileName+"_Mouse.txt");
+                    File common = FileUtils.createFile(".//log//"+fileName+"_Common.txt");
+                    bw1=new BufferedWriter(new FileWriter(mouse,true));
+                    bw2=new BufferedWriter(new FileWriter(common,true));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
