@@ -1,13 +1,6 @@
 package com.Hook;
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
+import java.awt.*;
 import java.awt.event.ActionListener;
 /**
  * 开启上述线程的类
@@ -28,11 +21,9 @@ public class Monitor  {
             SystemTray tray = SystemTray.getSystemTray();
             Image image = Toolkit.getDefaultToolkit().getImage(".//lib//monitor.png");
 
-            ActionListener exitListener = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("Exiting...");
-                    System.exit(0);
-                }
+            ActionListener exitListener = e -> {
+                System.out.println("Exiting...");
+                System.exit(0);
             };
 
             PopupMenu popup = new PopupMenu();
@@ -42,13 +33,9 @@ public class Monitor  {
 
             trayIcon = new TrayIcon(image, "monitor", popup);
 
-            ActionListener actionListener = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    trayIcon.displayMessage("Action Event",
-                            "An Action Event Has Been Peformed!",
-                            TrayIcon.MessageType.INFO);
-                }
-            };
+            ActionListener actionListener = e -> trayIcon.displayMessage("Action Event",
+                    "An Action Event Has Been Peformed!",
+                    TrayIcon.MessageType.INFO);
 
             trayIcon.setImageAutoSize(true);
             trayIcon.addActionListener(actionListener);
