@@ -1,6 +1,7 @@
 package com.Hook;
 
 
+import com.Hook.common.CommonFunction;
 import com.sun.jna.examples.win32.Kernel32;
 import com.sun.jna.examples.win32.User32;
 import com.sun.jna.examples.win32.User32.HHOOK;
@@ -63,18 +64,8 @@ public class KeyboardHook implements Runnable{
             return lib.CallNextHookEx(hhk, nCode, wParam, info.getPointer());
         };
         hhk = lib.SetWindowsHookEx(User32.WH_KEYBOARD_LL, keyboardHook, hMod, 0);
-        int result;
         MSG msg = new MSG();
-        while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
-            if (result == -1) {
-                System.err.println("error in get message");
-                break;
-            } else {
-                System.err.println("got message");
-                lib.TranslateMessage(msg);
-                lib.DispatchMessage(msg);
-            }
-        }
+        CommonFunction.printMsg(lib, msg);
         lib.UnhookWindowsHookEx(hhk);
     }
 

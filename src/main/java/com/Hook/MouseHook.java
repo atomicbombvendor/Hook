@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.Hook.common.CommonFunction;
 import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.Kernel32;
 import com.sun.jna.examples.win32.User32;
@@ -89,18 +90,8 @@ public class MouseHook implements Runnable{
             }
         };
         hhk = lib.SetWindowsHookEx(User32.WH_MOUSE_LL, mouseHook, hMod, 0);
-        int result;
         MSG msg = new MSG();
-        while ((result = lib.GetMessage(msg, null, 0, 0)) != 0) {
-            if (result == -1) {
-                System.err.println("error in get message");
-                break;
-            } else {
-                System.err.println("got message");
-                lib.TranslateMessage(msg);
-                lib.DispatchMessage(msg);
-            }
-        }
+        CommonFunction.printMsg(lib, msg);
         lib.UnhookWindowsHookEx(hhk);
     }
 }
