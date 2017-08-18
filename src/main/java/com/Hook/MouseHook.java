@@ -32,6 +32,7 @@ public class MouseHook implements Runnable{
     private boolean [] on_off=null;
 
     public MouseHook(boolean [] on_off){
+        System.out.println("Start to Thread MouseHook");
         this.on_off = on_off;
     }
 

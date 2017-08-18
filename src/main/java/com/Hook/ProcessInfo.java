@@ -20,6 +20,7 @@ public class ProcessInfo implements Runnable{
     private boolean [] on_off=null;
 
     public ProcessInfo(boolean [] on_off){
+        System.out.println("Start to Thread processInfo");
         this.on_off = on_off;
     }
 

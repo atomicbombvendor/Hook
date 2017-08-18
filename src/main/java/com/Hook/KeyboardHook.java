@@ -1,6 +1,5 @@
 package com.Hook;
 
-
 import com.Hook.common.CommonFunction;
 import com.Hook.common.KeyBoard;
 import com.sun.jna.examples.win32.Kernel32;
@@ -31,6 +30,7 @@ public class KeyboardHook implements Runnable{
     private Map<Integer, String> vCode = KeyBoard.vkCodeToKeyEvent();
 
     public KeyboardHook(boolean [] on_off){
+        System.out.println("Start to Thread keyBoardHook");
         this.on_off = on_off;
     }
 
