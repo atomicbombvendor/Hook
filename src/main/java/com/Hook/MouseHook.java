@@ -23,7 +23,8 @@ import com.sun.jna.examples.win32.User32.HOOKPROC;
  * http://blog.csdn.net/qq_27099139/article/details/73530614
  * Created by ZZ on 2017/8/17.
  */
-public class MouseHook implements Runnable{
+public class MouseHook extends Thread{
+    public static String name = "MouseHook";
 
     public static final int WM_MOUSEMOVE = 512;
     private static HHOOK hhk;
@@ -32,7 +33,6 @@ public class MouseHook implements Runnable{
     private boolean [] on_off=null;
 
     public MouseHook(boolean [] on_off){
-        System.out.println("Start to Thread MouseHook");
         this.on_off = on_off;
     }
 
@@ -49,6 +49,7 @@ public class MouseHook implements Runnable{
         public User32.ULONG_PTR dwExtraInfo;
     }
 
+    @Override
     public void run() {
         HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
         mouseHook = new LowLevelMouseProc() {
@@ -94,5 +95,9 @@ public class MouseHook implements Runnable{
         MSG msg = new MSG();
         CommonFunction.printMsg(lib, msg);
         lib.UnhookWindowsHookEx(hhk);
+    }
+
+    public void setOnOff(boolean[] on_off){
+        this.on_off = on_off;
     }
 }

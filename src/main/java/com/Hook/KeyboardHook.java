@@ -21,7 +21,9 @@ import java.util.Map;
  * 接下来是监听键盘的代码
  * http://blog.csdn.net/qq_27099139/article/details/73530614
  */
-public class KeyboardHook implements Runnable{
+public class KeyboardHook extends Thread{
+
+    public static String name = "KeyboardHook";
 
     private static HHOOK hhk;
     private static LowLevelKeyboardProc keyboardHook;
@@ -30,10 +32,10 @@ public class KeyboardHook implements Runnable{
     private Map<Integer, String> vCode = KeyBoard.vkCodeToKeyEvent();
 
     public KeyboardHook(boolean [] on_off){
-        System.out.println("Start to Thread keyBoardHook");
         this.on_off = on_off;
     }
 
+    @Override
     public void run() {
 
         HMODULE hMod = Kernel32.INSTANCE.GetModuleHandle(null);
@@ -70,6 +72,10 @@ public class KeyboardHook implements Runnable{
         MSG msg = new MSG();
         CommonFunction.printMsg(lib, msg);
         lib.UnhookWindowsHookEx(hhk);
+    }
+
+    public void setOnOff(boolean[] on_off){
+        this.on_off = on_off;
     }
 
 }

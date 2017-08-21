@@ -3,6 +3,7 @@ package com.Hook;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.Console;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -11,16 +12,16 @@ import java.util.Scanner;
  * Created by ZZ on 2017/8/17.
  */
 public class Monitor {
-    private static Thread processInfo;
-    private static Thread keyboardHook;
-    private static Thread mouseHook;
+    private static ProcessInfo processInfo;
+    private static KeyboardHook keyboardHook;
+    private static MouseHook mouseHook;
 
     public Monitor() {
         boolean[] on_off = {true};
         //create three thread
-        processInfo = new Thread(new ProcessInfo(on_off));
-        keyboardHook = new Thread(new KeyboardHook(on_off));
-        mouseHook = new Thread(new MouseHook(on_off));
+        processInfo = new ProcessInfo(on_off);
+        keyboardHook = new KeyboardHook(on_off);
+        mouseHook = new MouseHook(on_off);
     }
 
     public void start() {
@@ -62,27 +63,34 @@ public class Monitor {
         }
     }
 
-    public void interruptThread() {
-        if (!processInfo.isInterrupted()) {
-            processInfo.interrupt();
-        }
-        if (!keyboardHook.isInterrupted()) {
-            keyboardHook.interrupt();
-        }
-        if (!mouseHook.isInterrupted()) {
-            mouseHook.interrupt();
-        }
+    public void exitProcessInfo(){
+        boolean[] on_off = {false};
+        processInfo.setOnOff(on_off);
     }
 
-    public static void main(String[] args) {
+    public void exitKeyboard(){
+        boolean[] on_off = {false};
+        processInfo.setOnOff(on_off);
+    }
+
+    public void exitMouseHook(){
+        boolean[] on_off = {false};
+        processInfo.setOnOff(on_off);
+    }
+
+    public static void main(String[] args) throws IOException {
         System.out.println("Welcome! Program has started!");
-        //System.out.println("Input 0 to End!");
+        System.out.println("Input 'Y' to start monitor tool");
         Monitor monitor = new Monitor();
         monitor.start();
-//        Scanner sc = new Scanner(System.in);
-//        String st = sc.nextLine();//获取输入信息
-//        if (st.equals("0"))
-//            monitor.interruptThread();
-//        System.out.println("End!");
+        System.out.println("Enter 1 to end mouse hook");
+        Scanner sc = new Scanner(System.in);
+        System.out.println("input>> ");
+        String read = sc.nextLine();
+        if(read.equalsIgnoreCase("1")){
+            System.out.println(read);
+            monitor.exitProcessInfo();
+        }
+        System.out.println(read);
     }
 }

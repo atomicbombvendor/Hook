@@ -9,31 +9,20 @@ import java.util.Properties;
  * Created by ZZ on 2017/8/17.
  */
 public class PropertiesFactory {
-    private static volatile Properties properties;
+    private static Properties properties = new Properties();
 
-    //TODO read multi files
-    public synchronized static Properties getInstance() {
-        if (properties == null) {
-
-            synchronized (Properties.class) {
-                if (properties == null) {
-                    try {
-                        properties = new Properties();
-                        InputStream is = PropertiesFactory.class.getClassLoader().getResourceAsStream("keycode.properties");
-                        if (is == null) {
-                            throw new FileNotFoundException();
-                        }
-                        properties.load(is);
-                        is.close();
-                    } catch (FileNotFoundException e) {
-                        System.out.println("file not find" + e);
-                    } catch (IOException e) {
-                        System.out.println("IO Exception" + e);
-                    }
-                } else {
-                    return properties;
-                }
+    public  static Properties getInstance(String fileName) {
+        try {
+            InputStream is = PropertiesFactory.class.getClassLoader().getResourceAsStream(fileName);
+            if (is == null) {
+                throw new FileNotFoundException();
             }
+            properties.load(is);
+            is.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("file not find" + e);
+        } catch (IOException e) {
+            System.out.println("IO Exception" + e);
         }
         return properties;
     }

@@ -15,15 +15,15 @@ import java.util.Date;
  * http://blog.csdn.net/qq_27099139/article/details/73530614
  * Created by ZZ on 2017/8/17.
  */
-public class ProcessInfo implements Runnable{
-
+public class ProcessInfo extends Thread{
+    public static String name = "ProcessInfo";
     private boolean [] on_off=null;
 
     public ProcessInfo(boolean [] on_off){
-        System.out.println("Start to Thread processInfo");
         this.on_off = on_off;
     }
 
+    @Override
     public void run() {
         BufferedReader input = null;
         Process process;
@@ -33,7 +33,7 @@ public class ProcessInfo implements Runnable{
         String fileName;
         String time;
         try {
-            while(on_off[0]){
+            while(on_off[0]){//flag
                 fileName=df1.format(new Date());
                 time=df2.format(new Date());
                 File processInfo = FileUtils.createFile(".//log//"+fileName+"_ProcessInfo.txt");
@@ -53,6 +53,9 @@ public class ProcessInfo implements Runnable{
                     i++;
                 }
             }
+            if(!on_off[0]){
+                System.out.println("process end");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally{
@@ -65,4 +68,7 @@ public class ProcessInfo implements Runnable{
         }
     }
 
+    public void setOnOff(boolean[] on_off){
+        this.on_off = on_off;
+    }
 }
