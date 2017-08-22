@@ -1,6 +1,8 @@
 package com.Hook;
 
 
+import com.Hook.common.KeyUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,9 +17,9 @@ import java.util.Date;
  * http://blog.csdn.net/qq_27099139/article/details/73530614
  * Created by ZZ on 2017/8/17.
  */
-public class ProcessInfo extends Thread{
+public class ProcessInfo implements Runnable{
     public static String name = "ProcessInfo";
-    private boolean [] on_off=null;
+    private volatile boolean [] on_off = null;
 
     public ProcessInfo(boolean [] on_off){
         this.on_off = on_off;
@@ -33,7 +35,9 @@ public class ProcessInfo extends Thread{
         String fileName;
         String time;
         try {
-            while(on_off[0]){//flag
+            System.out.println("111"+KeyUtils.getInstance().getOn_off()[0]);
+            while(KeyUtils.getInstance().getOn_off()[0]){//flag
+                System.out.println("222"+KeyUtils.getInstance().getOn_off()[0]);
                 fileName=df1.format(new Date());
                 time=df2.format(new Date());
                 File processInfo = FileUtils.createFile(".//log//"+fileName+"_ProcessInfo.txt");
@@ -53,8 +57,10 @@ public class ProcessInfo extends Thread{
                     i++;
                 }
             }
-            if(!on_off[0]){
+            System.out.println("333"+KeyUtils.getInstance().getOn_off()[0]);
+            if(!KeyUtils.getInstance().getOn_off()[0]){
                 System.out.println("process end");
+                System.exit(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,9 +72,5 @@ public class ProcessInfo extends Thread{
                 e.printStackTrace();
             }
         }
-    }
-
-    public void setOnOff(boolean[] on_off){
-        this.on_off = on_off;
     }
 }

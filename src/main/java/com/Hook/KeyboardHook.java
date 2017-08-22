@@ -2,6 +2,7 @@ package com.Hook;
 
 import com.Hook.common.CommonFunction;
 import com.Hook.common.KeyBoard;
+import com.Hook.common.KeyUtils;
 import com.sun.jna.examples.win32.Kernel32;
 import com.sun.jna.examples.win32.User32;
 import com.sun.jna.examples.win32.User32.HHOOK;
@@ -21,14 +22,14 @@ import java.util.Map;
  * 接下来是监听键盘的代码
  * http://blog.csdn.net/qq_27099139/article/details/73530614
  */
-public class KeyboardHook extends Thread{
+public class KeyboardHook implements Runnable{
 
     public static String name = "KeyboardHook";
 
     private static HHOOK hhk;
     private static LowLevelKeyboardProc keyboardHook;
     final static User32 lib = User32.INSTANCE;
-    private boolean [] on_off=null;
+    private volatile boolean [] on_off=null;
     private Map<Integer, String> vCode = KeyBoard.vkCodeToKeyEvent();
 
     public KeyboardHook(boolean [] on_off){
@@ -55,7 +56,8 @@ public class KeyboardHook extends Thread{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (on_off[0] == false) {
+            if (!KeyUtils.getInstance().getOn_off()[1]) {
+                System.out.println("End keyboard");
                 System.exit(0);
             }
             try {
@@ -72,10 +74,6 @@ public class KeyboardHook extends Thread{
         MSG msg = new MSG();
         CommonFunction.printMsg(lib, msg);
         lib.UnhookWindowsHookEx(hhk);
-    }
-
-    public void setOnOff(boolean[] on_off){
-        this.on_off = on_off;
     }
 
 }

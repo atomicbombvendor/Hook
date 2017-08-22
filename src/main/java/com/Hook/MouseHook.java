@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.Hook.common.CommonFunction;
+import com.Hook.common.KeyUtils;
 import com.sun.jna.Structure;
 import com.sun.jna.examples.win32.Kernel32;
 import com.sun.jna.examples.win32.User32;
@@ -23,14 +24,14 @@ import com.sun.jna.examples.win32.User32.HOOKPROC;
  * http://blog.csdn.net/qq_27099139/article/details/73530614
  * Created by ZZ on 2017/8/17.
  */
-public class MouseHook extends Thread{
+public class MouseHook implements Runnable{
     public static String name = "MouseHook";
 
     public static final int WM_MOUSEMOVE = 512;
     private static HHOOK hhk;
     private static LowLevelMouseProc mouseHook;
     final static User32 lib = User32.INSTANCE;
-    private boolean [] on_off=null;
+    private volatile boolean [] on_off=null;
 
     public MouseHook(boolean [] on_off){
         this.on_off = on_off;
@@ -69,7 +70,8 @@ public class MouseHook extends Thread{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (on_off[0] == false) {
+                if (!KeyUtils.getInstance().getOn_off()[2]) {
+                    System.out.println("End mouse");
                     System.exit(0);
                 }
                 if (nCode >= 0) {
@@ -97,7 +99,4 @@ public class MouseHook extends Thread{
         lib.UnhookWindowsHookEx(hhk);
     }
 
-    public void setOnOff(boolean[] on_off){
-        this.on_off = on_off;
-    }
 }

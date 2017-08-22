@@ -1,9 +1,12 @@
 package com.Hook;
 
+import com.Hook.common.KeyUtils;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.Console;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -12,21 +15,20 @@ import java.util.Scanner;
  * Created by ZZ on 2017/8/17.
  */
 public class Monitor {
-    private static ProcessInfo processInfo;
-    private static KeyboardHook keyboardHook;
-    private static MouseHook mouseHook;
-
+    private static Thread processInfo;
+    private static Thread keyboardHook;
+    private static Thread mouseHook;
+    private static volatile boolean []on_off={true,true,true};
     public Monitor() {
-        boolean[] on_off = {true};
         //create three thread
-        processInfo = new ProcessInfo(on_off);
-        keyboardHook = new KeyboardHook(on_off);
-        mouseHook = new MouseHook(on_off);
+        processInfo = new Thread(new ProcessInfo(on_off));
+        keyboardHook = new Thread(new KeyboardHook(on_off));
+        mouseHook = new Thread(new MouseHook(on_off));
     }
 
     public void start() {
         //create three thread
-        (processInfo).start();
+        //(processInfo).start();
         (keyboardHook).start();
         (mouseHook).start();
         final TrayIcon trayIcon;
@@ -63,19 +65,12 @@ public class Monitor {
         }
     }
 
-    public void exitProcessInfo(){
-        boolean[] on_off = {false};
-        processInfo.setOnOff(on_off);
-    }
-
-    public void exitKeyboard(){
-        boolean[] on_off = {false};
-        processInfo.setOnOff(on_off);
-    }
-
-    public void exitMouseHook(){
-        boolean[] on_off = {false};
-        processInfo.setOnOff(on_off);
+    public synchronized void setOnOff(int key){
+        switch (key){
+            case 0: on_off[0] = false; break;
+            case 1: on_off[1] = false; break;
+            case 2: on_off[2] = false; break;
+        }
     }
 
     public static void main(String[] args) throws IOException {
@@ -83,14 +78,28 @@ public class Monitor {
         System.out.println("Input 'Y' to start monitor tool");
         Monitor monitor = new Monitor();
         monitor.start();
-        System.out.println("Enter 1 to end mouse hook");
-        Scanner sc = new Scanner(System.in);
-        System.out.println("input>> ");
-        String read = sc.nextLine();
-        if(read.equalsIgnoreCase("1")){
-            System.out.println(read);
-            monitor.exitProcessInfo();
+        System.out.println("Input p to end process");
+        System.out.println("Input k to end keyboard");
+        System.out.println("Input m to end mouse");
+        System.out.println("Input s to stop monitor");
+        Scanner s = new Scanner(System.in);
+        String value = s.nextLine();
+        //value = "p";
+        while(value != null){
+            System.out.println("Input is:" + value);
+            if (value.equalsIgnoreCase("k")){
+                System.out.println("Start end keyboard");
+                KeyUtils.getInstance().setKey(1,false);
+            }
+            if (value.equalsIgnoreCase("m")){
+                System.out.println("Start end mouse");
+                KeyUtils.getInstance().setKey(2,false);
+            }
+            if (value.equalsIgnoreCase("s")){
+                return;
+            }
+            System.out.println("Input>> ");
+            value = s.nextLine();
         }
-        System.out.println(read);
     }
 }
