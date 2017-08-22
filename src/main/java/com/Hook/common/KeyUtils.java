@@ -28,10 +28,11 @@ public class KeyUtils {
         return on_off;
     }
 
-    public void toStr(){
+    public void print(){
         for (boolean b: on_off) {
-            System.out.println(b);
+            System.out.print(" value: "+b);
         }
+        System.out.println("\n");
     }
 
 }

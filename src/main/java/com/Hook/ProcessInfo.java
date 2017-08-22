@@ -2,6 +2,7 @@ package com.Hook;
 
 
 import com.Hook.common.KeyUtils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,10 +20,15 @@ import java.util.Date;
  */
 public class ProcessInfo implements Runnable{
     public static String name = "ProcessInfo";
-    private volatile boolean [] on_off = null;
+    private static volatile Boolean flag = true;
 
     public ProcessInfo(boolean [] on_off){
-        this.on_off = on_off;
+    }
+
+    public ProcessInfo(){}
+
+    public static void refreshFlag(){
+        flag = KeyUtils.getInstance().getOn_off()[0];
     }
 
     @Override
@@ -35,9 +41,7 @@ public class ProcessInfo implements Runnable{
         String fileName;
         String time;
         try {
-            System.out.println("111"+KeyUtils.getInstance().getOn_off()[0]);
-            while(KeyUtils.getInstance().getOn_off()[0]){//flag
-                System.out.println("222"+KeyUtils.getInstance().getOn_off()[0]);
+            while(flag){//flag
                 fileName=df1.format(new Date());
                 time=df2.format(new Date());
                 File processInfo = FileUtils.createFile(".//log//"+fileName+"_ProcessInfo.txt");
@@ -56,12 +60,14 @@ public class ProcessInfo implements Runnable{
                     bw.flush();
                     i++;
                 }
+                synchronized (flag) {
+                    refreshFlag();
+                    if (!KeyUtils.getInstance().getOn_off()[0]) {
+                        return;
+                    }
+                }
             }
-            System.out.println("333"+KeyUtils.getInstance().getOn_off()[0]);
-            if(!KeyUtils.getInstance().getOn_off()[0]){
-                System.out.println("process end");
-                System.exit(0);
-            }
+          System.out.println("process thread end");
         } catch (Exception e) {
             e.printStackTrace();
         } finally{

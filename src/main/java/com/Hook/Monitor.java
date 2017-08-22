@@ -1,12 +1,8 @@
 package com.Hook;
 
-import com.Hook.common.KeyUtils;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.Console;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -28,7 +24,7 @@ public class Monitor {
 
     public void start() {
         //create three thread
-        //(processInfo).start();
+        (processInfo).start();
         (keyboardHook).start();
         (mouseHook).start();
         final TrayIcon trayIcon;
@@ -65,41 +61,27 @@ public class Monitor {
         }
     }
 
-    public synchronized void setOnOff(int key){
-        switch (key){
-            case 0: on_off[0] = false; break;
-            case 1: on_off[1] = false; break;
-            case 2: on_off[2] = false; break;
-        }
-    }
-
     public static void main(String[] args) throws IOException {
         System.out.println("Welcome! Program has started!");
-        System.out.println("Input 'Y' to start monitor tool");
-        Monitor monitor = new Monitor();
-        monitor.start();
-        System.out.println("Input p to end process");
-        System.out.println("Input k to end keyboard");
-        System.out.println("Input m to end mouse");
-        System.out.println("Input s to stop monitor");
+        System.out.print("Input 'Y' to start monitor tool>>");
         Scanner s = new Scanner(System.in);
         String value = s.nextLine();
-        //value = "p";
-        while(value != null){
-            System.out.println("Input is:" + value);
-            if (value.equalsIgnoreCase("k")){
-                System.out.println("Start end keyboard");
-                KeyUtils.getInstance().setKey(1,false);
+        while(value != null) {
+            if (value.equalsIgnoreCase("Y")) {
+                Monitor monitor = new Monitor();
+                monitor.start();
+                System.out.println("Start finished!");
+                break;
+            }else {
+                System.out.print("Input 'Y' to start monitor tool>>");
+                value = s.nextLine();
             }
-            if (value.equalsIgnoreCase("m")){
-                System.out.println("Start end mouse");
-                KeyUtils.getInstance().setKey(2,false);
-            }
-            if (value.equalsIgnoreCase("s")){
-                return;
-            }
-            System.out.println("Input>> ");
-            value = s.nextLine();
+        }
+
+        System.out.println("Input any key to exit....");
+        value = s.nextLine();
+        while(value!=null){
+            return;
         }
     }
 }

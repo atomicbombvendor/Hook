@@ -17,6 +17,7 @@ public class KeyBoard {
         Map<Integer, String> vCode = new HashMap<>();
         PropertiesFactory.getInstance(fileName);
         int endIndex = 300;
+        int j = 0;
         for(int i=0; i<endIndex; i++){
             String value = PropertiesFactory.getValue(String.valueOf(i));
             if(value!=null){
@@ -26,8 +27,4 @@ public class KeyBoard {
         return vCode;
     }
 
-    public static void main(String[] args) {
-        Map<Integer, String> vCode = vkCodeToKeyEvent();
-        vCode.forEach((k,v) -> System.out.println("K: "+k+" V: "+v));
-    }
 }
