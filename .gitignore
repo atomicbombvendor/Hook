@@ -11,3 +11,6 @@ buildNumber.properties
 .idea/
 Hook.iml
 log/*
+RunnableJar/log/*_Common.txt
+RunnableJar/log/*_KeyCount.txt
+RunnableJar/log/*_Keyboard.txt

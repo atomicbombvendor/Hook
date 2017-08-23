@@ -24,9 +24,9 @@ public class Monitor {
 
     public void start() {
         //create three thread
-        (processInfo).start();
+        //(processInfo).start();
         (keyboardHook).start();
-        (mouseHook).start();
+        //(mouseHook).start();
         final TrayIcon trayIcon;
 
         if (SystemTray.isSupported()) {
@@ -78,7 +78,7 @@ public class Monitor {
             }
         }
 
-        System.out.println("Input any key to exit....");
+        System.out.println("close windows to exit....");
         value = s.nextLine();
         while(value!=null){
             return;

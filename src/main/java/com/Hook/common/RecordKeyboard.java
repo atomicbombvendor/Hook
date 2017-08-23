@@ -2,6 +2,7 @@ package com.Hook.common;
 
 import com.Hook.FileUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -53,13 +54,13 @@ public class RecordKeyboard {
     }
 
     public void keyDown(Integer keyInfo){
-        ++pressCount;
         Integer count = 0;
         if(keyboardCount.containsKey(keyInfo)){
             count = keyboardCount.get(keyInfo);
         }
         //(++count)/2 because when key pressed, it have two signal
         keyboardCount.put(keyInfo, (++count));
+        ++pressCount;
         //when key was pressed 200 times, start to refresh file.
         if((pressCount>=flagTime) && (pressCount%flagTime==0)) {
             write();
@@ -80,7 +81,9 @@ public class RecordKeyboard {
             String filePath = ".//log//"+fileName+"_KeyCount.txt";
             File countFile = FileUtils.createFile(filePath);
             writer = new FileWriter(countFile, false);
-            writer.write(content);
+            BufferedWriter bw = new BufferedWriter(writer);
+            bw.write(content);
+            bw.flush();//need flush to clean buffer
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -95,11 +98,12 @@ public class RecordKeyboard {
     }
 
     private String getContent(){
-        StringBuilder sb = new StringBuilder(String.format("Keyboard has been pressed %d times\n", pressCount))
+        StringBuilder sb = new StringBuilder(String.format("Keyboard has been pressed %d times\n\r",
+                ((pressCount%2>0)?(pressCount/2)+1:(pressCount/2))))
                 .append("The every key of the keyboard is pressed\n ");
         keyboardCount.forEach((k,v) ->{
             String keyName = vCode.get(k);
-            sb.append(String.format("%s(%d) -> %d ", keyName, k, (v/2))).append("\n");
+            sb.append(String.format("%s(%d) -> %d ", keyName, k, ((v%2>0)?(v/2)+1:(v/2)))).append("\n\r");
         });
         return sb.toString();
     }
