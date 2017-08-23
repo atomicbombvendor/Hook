@@ -98,12 +98,12 @@ public class RecordKeyboard {
     }
 
     private String getContent(){
-        StringBuilder sb = new StringBuilder(String.format("Keyboard has been pressed %d times\n\r",
+        StringBuilder sb = new StringBuilder(String.format("Keyboard has been pressed %d times\r\n",
                 ((pressCount%2>0)?(pressCount/2)+1:(pressCount/2))))
                 .append("The every key of the keyboard is pressed\n ");
         keyboardCount.forEach((k,v) ->{
             String keyName = vCode.get(k);
-            sb.append(String.format("%s(%d) -> %d ", keyName, k, ((v%2>0)?(v/2)+1:(v/2)))).append("\n\r");
+            sb.append(String.format("%s(%d) -> %d ", keyName, k, ((v%2>0)?(v/2)+1:(v/2)))).append("\r\n");
         });
         return sb.toString();
     }
